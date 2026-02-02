@@ -70,3 +70,29 @@ To develop a simple, reliable, and user-friendly online food ordering platform t
 - Use of open-source technologies only
 - Online payment integration is optional
 - System should remain simple and easy to understand
+
+## MoSCoW Prioritization
+
+### Must Have
+- User Registration and Login
+- Browse Restaurant Menus
+- Add Items to Cart
+- Place Food Orders
+- Order Status Tracking
+- Restaurant Admin Dashboard
+
+### Should Have
+- Order History
+- Menu Management
+- Order Reports
+- Delivery Status Updates
+
+### Could Have
+- Ratings and Feedback System
+- Email or SMS Notifications
+- Delivery Assignment Feature
+
+### Won’t Have
+- Online Payment Gateway
+- AI-based Food Recommendations
+- Advanced Analytics Dashboard
