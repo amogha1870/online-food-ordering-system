@@ -5,6 +5,19 @@
 The Online Food Ordering System is a web-based application that allows customers to browse restaurant menus, place food orders, and track order status online. The system helps restaurants manage orders digitally, reducing manual errors and improving service efficiency.
 
 ---
+## Branching Strategy
+
+This project follows GitHub Flow.
+
+- main branch contains stable production code.
+- Feature branches are created for development work.
+- Each feature is developed separately and merged into main after testing.
+
+Example:
+feature-login
+feature-docker-setup
+
+---
 
 ## Problem It Solves
 Traditional food ordering methods such as phone calls or physical visits are time-consuming and prone to errors. Customers face long waiting times and lack order tracking. Restaurants struggle with manual order management. This system provides a centralized platform connecting customers, restaurants, and delivery personnel.
