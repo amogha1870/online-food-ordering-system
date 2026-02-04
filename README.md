@@ -18,6 +18,34 @@ feature-login
 feature-docker-setup
 
 ---
+## Quick Start – Local Development
+
+### Prerequisites
+- Install Docker Desktop
+- Install Git
+- Install VS Code
+
+### Steps to Run Project
+
+1. Clone Repository
+git clone <your-repo-link>
+
+2. Navigate to project folder
+cd online-food-ordering
+
+3. Build Docker Image
+docker build -t food-app .
+
+4. Run Container
+docker run -p 3000:3000 food-app
+---
+## Local Development Tools
+
+- Visual Studio Code
+- Git & GitHub
+- Docker Desktop
+- Command Prompt / Terminal
+---
 
 ## Problem It Solves
 Traditional food ordering methods such as phone calls or physical visits are time-consuming and prone to errors. Customers face long waiting times and lack order tracking. Restaurants struggle with manual order management. This system provides a centralized platform connecting customers, restaurants, and delivery personnel.
