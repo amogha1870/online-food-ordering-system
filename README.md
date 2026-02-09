@@ -116,8 +116,8 @@ To develop a simple, reliable, and user-friendly online food ordering platform t
 
 <img width="629" height="593" alt="image" src="https://github.com/user-attachments/assets/907a293c-80d0-4f7e-839c-373f4b956200" />
 
-Must Have features are essential for core food ordering functionality.
-Should Have features enhance usability and management.
-Could Have features improve user experience but are not critical.
-Won’t Have features are planned for future development phases.
+-Must Have features are essential for core food ordering functionality.
+-Should Have features enhance usability and management.
+-Could Have features improve user experience but are not critical.
+-Won’t Have features are planned for future development phases.
 
