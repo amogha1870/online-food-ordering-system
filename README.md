@@ -114,26 +114,10 @@ To develop a simple, reliable, and user-friendly online food ordering platform t
 
 ## MoSCoW Prioritization
 
-### Must Have
-- User Registration and Login
-- Browse Restaurant Menus
-- Add Items to Cart
-- Place Food Orders
-- Order Status Tracking
-- Restaurant Admin Dashboard
+<img width="629" height="593" alt="image" src="https://github.com/user-attachments/assets/907a293c-80d0-4f7e-839c-373f4b956200" />
 
-### Should Have
-- Order History
-- Menu Management
-- Order Reports
-- Delivery Status Updates
+Must Have features are essential for core food ordering functionality.
+Should Have features enhance usability and management.
+Could Have features improve user experience but are not critical.
+Won’t Have features are planned for future development phases.
 
-### Could Have
-- Ratings and Feedback System
-- Email or SMS Notifications
-- Delivery Assignment Feature
-
-### Won’t Have
-- Online Payment Gateway
-- AI-based Food Recommendations
-- Advanced Analytics Dashboard
