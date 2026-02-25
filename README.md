@@ -116,6 +116,26 @@ To develop a simple, reliable, and user-friendly online food ordering platform t
 
 <img width="629" height="593" alt="image" src="https://github.com/user-attachments/assets/907a293c-80d0-4f7e-839c-373f4b956200" />
 
+## Software Design
+
+The FoodieExpress system uses a Layered Client–Server architecture combined with the MVC design pattern.  
+This design separates the user interface, business logic, and data access layers, improving scalability, maintainability, and modular development.
+
+### Architecture Diagram
+
+![Architecture](docs/design/architecture.png)
+### UI Design
+
+The user interface was designed using Figma with a focus on clarity, consistency, and ease of navigation.
+
+Key screens include:
+- Login & Registration
+- Restaurant Browsing
+- Menu & Item Selection
+- Cart Management
+- Checkout
+- Order Confirmation
+
 -Must Have features are essential for core food ordering functionality.
 -Should Have features enhance usability and management.
 -Could Have features improve user experience but are not critical.
