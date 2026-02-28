@@ -1,120 +1,154 @@
 
-# Online Food Ordering System
+Online Food Ordering System (FoodieExpress)
+Project Overview
 
-## Project Overview
-The Online Food Ordering System is a web-based application that allows customers to browse restaurant menus, place food orders, and track order status online. The system helps restaurants manage orders digitally, reducing manual errors and improving service efficiency.
+FoodieExpress is a web-based Online Food Ordering System that allows customers to browse restaurant menus, place food orders, and track order status online. The system enables restaurants to manage orders digitally, reducing manual errors and improving operational efficiency.
 
----
-## Branching Strategy
+Branching Strategy
 
-This project follows GitHub Flow.
+This project follows GitHub Flow:
 
-- main branch contains stable production code.
-- Feature branches are created for development work.
-- Each feature is developed separately and merged into main after testing.
+The main branch contains stable production-ready code.
 
-Example:
+Feature branches are created for new development tasks.
+
+Each feature is independently developed, tested, and then merged into main.
+
+Example feature branches:
+
 feature-login
+
 feature-docker-setup
 
----
-## Quick Start – Local Development
+feature-order-module
 
-### Prerequisites
-- Install Docker Desktop
-- Install Git
-- Install VS Code
+This workflow ensures controlled development and stable releases.
 
-### Steps to Run Project
+Quick Start – Local Development
+Prerequisites
 
-1. Clone Repository
-git clone <your-repo-link>
+Docker Desktop
 
-2. Navigate to project folder
+Git
+
+Visual Studio Code
+
+Steps to Run the Project
+git clone <repository-url>
 cd online-food-ordering
-
-3. Build Docker Image
 docker build -t food-app .
-
-4. Run Container
 docker run -p 3000:3000 food-app
----
-## Local Development Tools
 
-- Visual Studio Code
-- Git & GitHub
-- Docker Desktop
-- Command Prompt / Terminal
----
+Then open:
 
-## Problem It Solves
-Traditional food ordering methods such as phone calls or physical visits are time-consuming and prone to errors. Customers face long waiting times and lack order tracking. Restaurants struggle with manual order management. This system provides a centralized platform connecting customers, restaurants, and delivery personnel.
+http://localhost:3000
 
----
+Development Tools
 
-## Target Users (Personas)
+Visual Studio Code
 
-### Customer
-- Orders food online
-- Browses menus
-- Tracks order status
+Git & GitHub
 
-### Restaurant Staff
-- Manages menu items
-- Processes customer orders
-- Updates order status
+Docker Desktop
 
-### Delivery Personnel
-- Receives delivery assignments
-- Updates delivery progress
+Command Prompt / Terminal
 
-### System Administrator
-- Manages users and system operations
-- Monitors system performance
+Problem It Solves
 
----
+Traditional food ordering methods such as phone calls or in-person visits are time-consuming and prone to errors. Customers face long wait times and lack real-time tracking. Restaurants struggle with manual order processing.
 
-## Vision Statement
-To develop a simple, reliable, and user-friendly online food ordering platform that improves customer convenience and enhances restaurant order management efficiency.
+FoodieExpress provides a centralized digital platform connecting customers, restaurants, and delivery personnel, improving accuracy, speed, and convenience.
 
----
+Target Users (Personas)
+Customer
 
-## Key Features / Goals
-- User registration and login
-- Browse restaurant menus
-- Add food items to cart
-- Place food orders
-- Track order status
-- Restaurant admin dashboard for menu and order management
+Browse restaurants and menus
 
----
+Add items to cart
 
-## Success Metrics
-- Users can register and log in successfully
-- Customers can place orders without errors
-- Restaurants can manage orders efficiently
-- At least 80% of users can operate the system without external help
-- System runs without major bugs
+Place and track orders
 
----
+Restaurant Staff
 
-## Assumptions & Constraints
+Manage menu items
 
-### Assumptions
-- Users have internet access
-- Restaurants regularly update menus
-- Orders are processed during working hours
-- Users are familiar with basic web applications
+Process and update orders
 
-### Constraints
-- Limited academic development timeline
-- Use of open-source technologies only
-- Online payment integration is optional
-- System should remain simple and easy to understand
+Track incoming requests
+
+Delivery Personnel
+
+Receive delivery assignments
+
+Update delivery status
+
+System Administrator
+
+Manage users
+
+Monitor system operations
+
+Ensure system stability
+
+Vision Statement
+
+To develop a simple, reliable, and user-friendly online food ordering platform that enhances customer convenience and improves restaurant order management efficiency.
+
+Key Features
+
+User registration and authentication
+
+Browse restaurant menus
+
+Add food items to cart
+
+Place food orders
+
+Track order status
+
+Restaurant dashboard for managing menu and orders
+
+Success Metrics
+
+Users can successfully register and log in
+
+Customers can place orders without errors
+
+Restaurants can manage orders efficiently
+
+At least 80% of users can use the system without external help
+
+System runs without critical bugs
+
+Assumptions & Constraints
+Assumptions
+
+Users have internet access
+
+Restaurants regularly update menus
+
+Orders are processed during working hours
+
+Users understand basic web navigation
+
+Constraints
+
+Limited academic development timeline
+
+Use of open-source technologies only
+
+Online payment integration optional
+
+System kept simple for academic clarity
 
 ## MoSCoW Prioritization
 
 <img width="629" height="593" alt="image" src="https://github.com/user-attachments/assets/907a293c-80d0-4f7e-839c-373f4b956200" />
+
+-Must Have features are essential for core food ordering functionality.
+-Should Have features enhance usability and management.
+-Could Have features improve user experience but are not critical.
+-Won’t Have features are planned for future development phases.
 
 ## Software Design
 
@@ -126,18 +160,47 @@ This design separates the user interface, business logic, and data access layers
 ![Architecture](docs/design/architecture.png)
 ### UI Design
 
+##User Interface Design
+
 The user interface was designed using Figma with a focus on clarity, consistency, and ease of navigation.
 
-Key screens include:
-- Login & Registration
-- Restaurant Browsing
-- Menu & Item Selection
-- Cart Management
-- Checkout
-- Order Confirmation
+Key Screens
 
--Must Have features are essential for core food ordering functionality.
--Should Have features enhance usability and management.
--Could Have features improve user experience but are not critical.
--Won’t Have features are planned for future development phases.
+Login & Registration
+
+Restaurant Browsing
+
+Menu & Item Selection
+
+Cart Management
+
+Checkout
+
+Order Confirmation
+
+UI Design Principles Applied
+
+Consistent button styling
+
+Clear feedback messages
+
+₹ currency format for Indian users
+
+Structured layout with clean spacing
+
+Simple and intuitive navigation flow
+
+Main Design Decisions
+
+Separated authentication module to maintain low coupling.
+
+Used layered architecture for scalability and maintainability.
+
+Modularized features (Cart, Orders, Menu) for high cohesion.
+
+Abstracted database access through the Model layer.
+
+Designed a consistent UI to improve usability and user confidence.
+
+
 
