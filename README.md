@@ -1,5 +1,6 @@
 
 **Online Food Ordering System- (FoodieExpress)**
+
 **Project Overview**
 
 FoodieExpress is a web-based Online Food Ordering System that allows customers to browse restaurant menus, place food orders, and track order status online. The system enables restaurants to manage orders digitally, reducing manual errors and improving operational efficiency.
@@ -21,6 +22,7 @@ Example feature branches:
 This workflow ensures controlled development and stable releases.
 
 **Quick Start – Local Development**
+
 Prerequisites
 
 - Docker Desktop
@@ -54,6 +56,7 @@ Traditional food ordering methods such as phone calls or in-person visits are ti
 FoodieExpress provides a centralized digital platform connecting customers, restaurants, and delivery personnel, improving accuracy, speed, and convenience.
 
 **Target Users (Personas)**
+
 Customer
 
 - Browse restaurants and menus
@@ -99,6 +102,7 @@ To develop a simple, reliable, and user-friendly online food ordering platform t
 - System runs without critical bugs
 
 **Assumptions & Constraints**
+
 Assumptions
 
 - Users have internet access
@@ -116,8 +120,8 @@ Constraints
 ## MoSCoW Prioritization
 
 <img width="629" height="593" alt="image" src="https://github.com/user-attachments/assets/907a293c-80d0-4f7e-839c-373f4b956200" />
-### Must Have
 
+### Must Have
 - User Registration and Login
 - Browse Restaurant Menus
 - Add Items to Cart
