@@ -1,16 +1,16 @@
 
-#Online Food Ordering System (FoodieExpress)
-##Project Overview
+**Online Food Ordering System- (FoodieExpress)**
+**Project Overview**
 
 FoodieExpress is a web-based Online Food Ordering System that allows customers to browse restaurant menus, place food orders, and track order status online. The system enables restaurants to manage orders digitally, reducing manual errors and improving operational efficiency.
 
-##Branching Strategy
+**Branching Strategy**
 
 This project follows GitHub Flow:
 
 - The main branch contains stable production-ready code.
 - Feature branches are created for new development tasks.
-  -Each feature is independently developed, tested, and then merged into main.
+- Each feature is independently developed, tested, and then merged into main.
 
 Example feature branches:
 
@@ -20,31 +20,31 @@ Example feature branches:
 
 This workflow ensures controlled development and stable releases.
 
-##Quick Start – Local Development
-###Prerequisites
+**Quick Start – Local Development**
+Prerequisites
 
--Docker Desktop
+- Docker Desktop
 - Git
 - Visual Studio Code
 
 Steps to Run the Project
-git clone <repository-url>
-cd online-food-ordering
-docker build -t food-app .
-docker run -p 3000:3000 food-app
+- git clone <repository-url>
+- cd online-food-ordering
+- docker build -t food-app .
+- docker run -p 3000:3000 food-app
 
 Then open:
 
 http://localhost:3000
 
-##Development Tools
+**Development Tools**
 
 - Visual Studio Code
 - Git & GitHub
 - Docker Desktop
 - Command Prompt / Terminal
 
-##Problem It Solves
+**Problem It Solves**
 
 Traditional food ordering methods such as phone calls or in-person visits are time-consuming and prone to errors.
 
@@ -53,7 +53,7 @@ Traditional food ordering methods such as phone calls or in-person visits are ti
 
 FoodieExpress provides a centralized digital platform connecting customers, restaurants, and delivery personnel, improving accuracy, speed, and convenience.
 
-##Target Users (Personas)
+**Target Users (Personas)**
 Customer
 
 - Browse restaurants and menus
@@ -77,11 +77,11 @@ System Administrator
 - Monitor system operations
 - Ensure system stability
 
-##Vision Statement
+**Vision Statement**
 
 To develop a simple, reliable, and user-friendly online food ordering platform that enhances customer convenience and improves restaurant order management efficiency.
 
-##Key Features
+**Key Features**
 
 - User registration and authentication
 - Browse restaurant menus
@@ -90,7 +90,7 @@ To develop a simple, reliable, and user-friendly online food ordering platform t
 - Track order status
 - Restaurant dashboard for managing menu and orders
 
-##Success Metrics
+**Success Metrics**
 
 - Users can successfully register and log in
 - Customers can place orders without errors
@@ -98,7 +98,7 @@ To develop a simple, reliable, and user-friendly online food ordering platform t
 - At least 80% of users can use the system without external help
 - System runs without critical bugs
 
-##Assumptions & Constraints
+**Assumptions & Constraints**
 Assumptions
 
 - Users have internet access
@@ -117,6 +117,7 @@ Constraints
 
 <img width="629" height="593" alt="image" src="https://github.com/user-attachments/assets/907a293c-80d0-4f7e-839c-373f4b956200" />
 ### Must Have
+
 - User Registration and Login
 - Browse Restaurant Menus
 - Add Items to Cart
@@ -145,31 +146,31 @@ Constraints
 
 ![alt text](architecture.png)
 
-User Interface Design
+**User Interface Design**
 
 The user interface was designed using Figma with a focus on clarity, consistency, and ease of navigation.
 
-Key Screens
+**Key Screens**
 
-• Login & Registration
-• Restaurant Browsing
-• Menu & Item Selection
-• Cart Management
-• Checkout
-• Order Confirmation
+- Login & Registration
+- Restaurant Browsing
+- Menu & Item Selection
+- Cart Management
+- Checkout
+- Order Confirmation
 
-UI Design Principles Applied
+**UI Design Principles Applied**
 
-• Consistent button styling
-• Clear feedback messages
-• ₹ currency format for Indian users
-• Structured layout with clean spacing
-• Simple and intuitive navigation flow
+- Consistent button styling
+- Clear feedback messages
+- ₹ currency format for Indian users
+- Structured layout with clean spacing
+- Simple and intuitive navigation flow
 
-Main Design Decisions
+**Main Design Decisions**
 
-• Separated authentication module to maintain low coupling.
-• Used layered architecture for scalability and maintainability.
-• Modularized features (Cart, Orders, Menu) for high cohesion.
-• Abstracted database access through the Model layer.
-• Designed a consistent UI to improve usability and user confidence.
+- Separated authentication module to maintain low coupling.
+- Used layered architecture for scalability and maintainability.
+- Modularized features (Cart, Orders, Menu) for high cohesion.
+- Abstracted database access through the Model layer.
+- Designed a consistent UI to improve usability and user confidence.
