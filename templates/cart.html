@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart – FoodieExpress</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/restaurants" class="nav-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+      </svg>
+      <span>FoodieExpress</span>
+    </a>
+    <div class="nav-links" style="margin-left:auto;">
+      <a href="/restaurants" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="nav-label">Home</span>
+      </a>
+      <a href="/logout" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="nav-label">{{ user.name.split()[0] }}</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="cart-layout">
+
+    <!-- Left: Cart Items -->
+    <div>
+      <h1 class="cart-title">Shopping Cart</h1>
+
+      {% if cart_items %}
+      <p class="cart-count">{{ cart_items|length }} item{{ 's' if cart_items|length != 1 }} in your cart</p>
+
+      {% if subtotal >= 500 %}
+      <div class="free-delivery-banner">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        🎉 You've qualified for free delivery on orders above ₹500!
+      </div>
+      {% endif %}
+
+      {% for item in cart_items %}
+      <div class="cart-item animate-in" id="cart-row-{{ item.id }}">
+        <img class="cart-item-img"
+             src="{{ item.image_url }}" alt="{{ item.name }}"
+             onerror="this.onerror=null;this.src='https://placehold.co/160x140/f0ede8/8a8480?text=Food'">
+        <div class="cart-item-info">
+          <div class="cart-item-name">{{ item.name }}</div>
+          <div class="cart-item-rest">{{ item.restaurant }}</div>
+          <div class="cart-item-controls">
+            <button class="qty-btn" onclick="updateCart({{ item.id }}, 'decrease')">−</button>
+            <span class="qty-num" id="cart-qty-{{ item.id }}">{{ item.qty }}</span>
+            <button class="qty-btn" onclick="updateCart({{ item.id }}, 'increase')">+</button>
+            <button class="remove-btn" onclick="removeItem({{ item.id }})" title="Remove">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="cart-item-price">
+          <div class="cart-item-total" id="cart-total-{{ item.id }}">₹{{ item.total }}</div>
+          <div class="cart-item-each">₹{{ item.price }} each</div>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% else %}
+      <div class="empty-cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/>
+        </svg>
+        <p>Your cart is empty</p>
+        <a href="/restaurants" class="btn btn-primary">Browse Restaurants</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Right: Order Summary -->
+    {% if cart_items %}
+    <div class="order-summary animate-in">
+      <div class="summary-title">Order Summary</div>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="summary-subtotal">₹{{ "%.2f"|format(subtotal) }}</span>
+      </div>
+      <div class="summary-row">
+        <span>GST (5%)</span>
+        <span id="summary-gst">₹{{ "%.2f"|format(gst) }}</span>
+      </div>
+      <div class="summary-row">
+        <span>Delivery Fee</span>
+        <span id="summary-delivery" class="{{ 'free' if delivery == 0 }}">
+          {{ 'FREE' if delivery == 0 else '₹' + delivery|string }}
+        </span>
+      </div>
+      <div class="summary-row total">
+        <span>Total Amount</span>
+        <span id="summary-total">₹{{ "%.2f"|format(total) }}</span>
+      </div>
+      <a href="/checkout" class="btn btn-primary checkout-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+        </svg>
+        Proceed to Checkout
+      </a>
+      <div class="summary-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Free delivery on orders above ₹500
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<script>
+function updateCart(itemId, action) {
+  fetch('/api/cart/update', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({item_id: itemId, action})
+  }).then(r=>r.json()).then(() => location.reload());
+}
+function removeItem(itemId) {
+  fetch('/api/cart/update', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({item_id: itemId, action:'remove'})
+  }).then(r=>r.json()).then(() => location.reload());
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Placed – FoodieExpress</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    @keyframes checkScale { 0%{transform:scale(0) rotate(-10deg);opacity:0} 60%{transform:scale(1.15);} 100%{transform:scale(1);opacity:1} }
+    .success-icon { animation: checkScale .6s cubic-bezier(.34,1.56,.64,1) both; animation-delay: .2s; opacity: 0; }
+    @keyframes confettiFall {
+      0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/restaurants" class="nav-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+      </svg>
+      <span>FoodieExpress</span>
+    </a>
+  </div>
+</nav>
+
+<canvas class="confetti" id="confetti-canvas"></canvas>
+
+<div class="success-page animate-in">
+
+  <div class="success-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+  </div>
+
+  <h1 class="success-title">Order Placed Successfully!</h1>
+  <p class="success-sub">Thank you for your order, {{ name.split()[0] }}! We're preparing your food now. 🍽️</p>
+
+  <div class="order-id-card">
+    <div class="order-id-label">Order ID</div>
+    <div class="order-id-val">#{{ order_id }}</div>
+    <div class="order-id-date">{{ now if now else 'Today' }}</div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Delivery Address
+    </div>
+    <div class="info-card-body">
+      {{ name }}<br>{{ address }}
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Estimated Delivery
+    </div>
+    <div class="info-card-body">30–40 minutes</div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+      Your Order
+    </div>
+    <ul class="order-items-list">
+      {% for item in cart_items %}
+      <li>
+        <span>{{ item.name }} <span style="color:var(--muted)">x{{ item.qty }}</span></span>
+        <span style="font-weight:600">₹{{ item.total }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="success-totals">
+      <div class="success-row">
+        <span>Subtotal</span><span>₹{{ "%.2f"|format(subtotal) }}</span>
+      </div>
+      <div class="success-row">
+        <span>GST (5%)</span><span>₹{{ "%.2f"|format(gst) }}</span>
+      </div>
+      <div class="success-row">
+        <span>Delivery</span>
+        <span style="{{ 'color:var(--green);font-weight:600' if delivery == 0 }}">
+          {{ 'FREE' if delivery == 0 else '₹' + delivery|string }}
+        </span>
+      </div>
+      <div class="success-row total">
+        <span>Total</span><span>₹{{ "%.2f"|format(total) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-actions">
+    <button class="btn btn-primary" onclick="trackOrder()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Track Order
+    </button>
+    <a href="/restaurants" class="btn btn-outline">Back to Home</a>
+  </div>
+
+</div>
+
+<script>
+// Confetti
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const colors = ['#e8472a','#d4a017','#27ae60','#3498db','#9b59b6','#f39c12'];
+const pieces = Array.from({length: 80}, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * -200,
+  w: Math.random() * 10 + 6,
+  h: Math.random() * 6 + 4,
+  color: colors[Math.floor(Math.random()*colors.length)],
+  speed: Math.random() * 3 + 2,
+  angle: Math.random() * 360,
+  spin: (Math.random() - 0.5) * 8,
+  opacity: 1
+}));
+let frame = 0;
+function drawConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  pieces.forEach(p => {
+    ctx.save();
+    ctx.globalAlpha = p.opacity;
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.angle * Math.PI / 180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+    ctx.restore();
+    p.y += p.speed;
+    p.angle += p.spin;
+    p.x += Math.sin(p.angle * 0.02) * 1.5;
+    if (p.y > canvas.height * 0.7) p.opacity -= 0.02;
+  });
+  frame++;
+  if (frame < 200) requestAnimationFrame(drawConfetti);
+  else { ctx.clearRect(0,0,canvas.width,canvas.height); }
+}
+setTimeout(drawConfetti, 400);
+
+function trackOrder() {
+  alert('🛵 Your order is on its way!\n\nOrder #{{ order_id }}\nEstimated: 30–40 minutes\n\nReal-time tracking coming soon!');
+}
+</script>
+</body>
+</html>

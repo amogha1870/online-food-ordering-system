@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ restaurant.name }} – FoodieExpress</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/restaurants" class="nav-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+      </svg>
+      <span>FoodieExpress</span>
+    </a>
+    <div class="nav-links" style="margin-left:auto;">
+      <a href="/cart" class="nav-link" id="cart-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/></svg>
+        <span class="cart-badge" id="cart-count-badge">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- Back -->
+  <a href="/restaurants" class="back-nav">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+    </svg>
+    All Restaurants
+  </a>
+  <!-- Hero -->
+  <div class="restaurant-hero">
+    <img class="restaurant-hero-img"
+         
+         src="{{ restaurant.image_url }}"
+         alt="{{ restaurant.name }}"
+         onerror="this.onerror=null;this.src='https://placehold.co/240x200/f0ede8/8a8480?text={{ restaurant.name | urlencode }}'">
+    <div>
+      <h1 class="hero-name">{{ restaurant.name }}</h1>
+      <p class="hero-cuisine">{{ restaurant.cuisine }} Cuisine</p>
+      <div class="hero-meta">
+        <span class="hero-rating">
+          <span class="star">★</span> {{ restaurant.rating }}
+        </span>
+        <span class="hero-time">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          {{ restaurant.delivery_time }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Tabs -->
+  <div class="category-tabs">
+    {% for cat in categories %}
+    <button class="cat-tab {% if loop.first %}active{% endif %}" data-cat="{{ cat }}">
+      {{ cat }}
+    </button>
+    {% endfor %}
+  </div>
+
+  <!-- Menu Grid -->
+  <div class="menu-grid" id="menu-grid">
+    {% for item in items %}
+    {% set cat_class = {'Starters':'tag-starters','Main Course':'tag-main','Breads':'tag-breads','Desserts':'tag-desserts','Beverages':'tag-beverages'}.get(item.category, '') %}
+    <div class="menu-card animate-in" data-category="{{ item.category }}" data-item-id="{{ item.id }}">
+      <div class="menu-img-wrap">
+        <img src="{{ item.image_url }}" alt="{{ item.name }}" loading="lazy"
+             onerror="this.onerror=null;this.src='https://placehold.co/400x300/f0ede8/8a8480?text={{ item.name | urlencode }}'">
+        <span class="tag {{ cat_class }} cat-label">{{ item.category }}</span>
+      </div>
+      <div class="menu-body">
+        <div class="menu-top">
+          <span class="{% if item.veg %}badge-veg{% else %}badge-nonveg{% endif %}"></span>
+          <span class="menu-name">{{ item.name }}</span>
+        </div>
+        <p class="menu-desc">{{ item.desc }}</p>
+        <div class="menu-footer">
+          <span class="menu-price">₹{{ item.price }}</span>
+          <div class="qty-control" id="ctrl-{{ item.id }}">
+            {% set qty = cart.get(item.id|string, 0) %}
+            {% if qty > 0 %}
+            <button class="qty-btn" onclick="updateQty({{ item.id }}, 'decrease')">−</button>
+            <span class="qty-num" id="qty-{{ item.id }}">{{ qty }}</span>
+            <button class="qty-btn" onclick="updateQty({{ item.id }}, 'increase')">+</button>
+            {% else %}
+            <button class="add-btn" onclick="addToCart({{ item.id }}, '{{ item.name }}')">
+              + Add
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="cart-toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg">Added to cart</span>
+  <a href="/cart">View Cart →</a>
+</div>
+
+<script>
+  let cartCount = 0;
+
+  // Init cart count
+  fetch('/api/cart/count').then(r=>r.json()).then(d=>{
+    cartCount = d.count;
+    updateBadge();
+  });
+
+  function updateBadge() {
+    document.getElementById('cart-count-badge').textContent = cartCount;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  function addToCart(itemId, name) {
+    fetch('/api/cart/add', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({item_id: itemId})
+    }).then(r=>r.json()).then(d=>{
+      cartCount = d.cart_count;
+      updateBadge();
+      // Switch to qty control
+      const ctrl = document.getElementById('ctrl-' + itemId);
+      ctrl.innerHTML = `
+        <button class="qty-btn" onclick="updateQty(${itemId},'decrease')">−</button>
+        <span class="qty-num" id="qty-${itemId}">${d.qty}</span>
+        <button class="qty-btn" onclick="updateQty(${itemId},'increase')">+</button>
+      `;
+      const badge = document.getElementById('cart-count-badge');
+      badge.classList.add('pulse');
+      setTimeout(()=>badge.classList.remove('pulse'), 300);
+      showToast(`"${name}" added to cart`);
+    });
+  }
+
+  function updateQty(itemId, action) {
+    fetch('/api/cart/update', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({item_id: itemId, action})
+    }).then(r=>r.json()).then(d=>{
+      cartCount = d.cart_count;
+      updateBadge();
+      if (action === 'decrease') {
+        const qtyEl = document.getElementById('qty-' + itemId);
+        const newQty = qtyEl ? parseInt(qtyEl.textContent) - 1 : 0;
+        if (newQty <= 0) {
+          // Revert to add button
+          const ctrl = document.getElementById('ctrl-' + itemId);
+          ctrl.innerHTML = `<button class="add-btn" onclick="addToCart(${itemId}, '')">+ Add</button>`;
+        } else {
+          qtyEl.textContent = newQty;
+        }
+      } else {
+        const qtyEl = document.getElementById('qty-' + itemId);
+        if (qtyEl) qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
+      }
+    });
+  }
+
+  // Category filter
+  document.querySelectorAll('.cat-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      document.querySelectorAll('.menu-card').forEach(card => {
+        card.classList.toggle('hidden', cat !== 'All' && card.dataset.category !== cat);
+      });
+    });
+  });
+</script>
+</body>
+</html>

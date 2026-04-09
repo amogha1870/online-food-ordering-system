@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurants – FoodieExpress</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/restaurants" class="nav-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+      </svg>
+      <span>FoodieExpress</span>
+    </a>
+    <div class="nav-links">
+      <a href="/restaurants" class="nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="nav-label">Home</span>
+      </a>
+      <a href="/restaurants" class="nav-link active" style="color:var(--ink);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+        <span class="nav-label">Restaurants</span>
+      </a>
+      <a href="/cart" class="nav-link" id="cart-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/></svg>
+        <span class="nav-label">Cart</span>
+        <span class="cart-badge" id="cart-count-badge">0</span>
+      </a>
+      <a href="/logout" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="nav-label">{{ user.name.split()[0] }}</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Search -->
+<div class="search-wrap">
+  <div class="search-box">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input class="search-input" type="text" id="search-input"
+           placeholder="Search for restaurants or cuisines…">
+  </div>
+  <p class="search-results-info" id="search-info"></p>
+</div>
+
+<!-- Restaurant listing -->
+<div class="container">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">All Restaurants</h2>
+      <span class="section-sub" id="rest-count">{{ restaurants|length }} restaurants available</span>
+    </div>
+
+    <div class="restaurants-grid" id="restaurants-grid">
+      {% for r in restaurants %}
+      <a href="/menu/{{ r.id }}" class="restaurant-card animate-in"
+         data-name="{{ r.name|lower }}" data-cuisine="{{ r.cuisine|lower }}">
+        <div class="card-img-wrap">
+          <img src="{{ r.image_url }}"
+               alt="{{ r.name }}"
+               loading="lazy"
+               onerror="this.onerror=null;this.src='https://placehold.co/600x360/f0ede8/8a8480?text={{ r.name | urlencode }}'">
+          <div class="card-rating">
+            <span class="star">★</span>{{ r.rating }}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">{{ r.name }}</div>
+          <div class="card-cuisine">{{ r.cuisine }}</div>
+          <div class="card-meta">
+            <span class="card-time">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              {{ r.delivery_time }}
+            </span>
+            <span class="card-min">₹{{ r.min_order }}</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+
+      <div class="no-results" id="no-results" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p>No restaurants found for your search.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Fetch cart count on load
+  fetch('/api/cart/count').then(r=>r.json()).then(d=>{
+    document.getElementById('cart-count-badge').textContent = d.count;
+  });
+
+  // Debounced search
+  let debounceTimer;
+  const searchInput = document.getElementById('search-input');
+  const cards = document.querySelectorAll('.restaurant-card');
+  const noResults = document.getElementById('no-results');
+  const restCount = document.getElementById('rest-count');
+  const searchInfo = document.getElementById('search-info');
+
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      const q = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const match = !q || card.dataset.name.includes(q) || card.dataset.cuisine.includes(q);
+        card.classList.toggle('hidden', !match);
+        if (match) visible++;
+      });
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+      if (q) {
+        searchInfo.textContent = `${visible} result${visible !== 1 ? 's' : ''} for "${searchInput.value}"`;
+        restCount.textContent = `${visible} restaurants available`;
+      } else {
+        searchInfo.textContent = '';
+        restCount.textContent = `{{ restaurants|length }} restaurants available`;
+      }
+    }, 280);
+  });
+</script>
+</body>
+</html>
