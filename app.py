@@ -7,7 +7,7 @@ from flask import (Flask, render_template, request, redirect,
                    url_for, session, jsonify, g)
 
 app = Flask(__name__)
-app.secret_key = 'foodieexpress_secret_key_2024'
+app.secret_key = "demo_secret_key_123"
 
 DATABASE = os.path.join(os.path.dirname(__file__), 'foodieexpress.db')
 
