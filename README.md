@@ -5,6 +5,10 @@
 
 FoodieExpress is a web-based Online Food Ordering System that allows customers to browse restaurant menus, place food orders, and track order status online. The system enables restaurants to manage orders digitally, reducing manual errors and improving operational efficiency.
 
+🚀 Live Demo
+
+Application: https://online-food-ordering-system-tdgw.onrender.com
+
 **Branching Strategy**
 
 This project follows GitHub Flow:
