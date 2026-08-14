@@ -1,7 +1,7 @@
 
 **Online Food Ordering System- (FoodieExpress)**
 
-**🚀 Live Demo **
+**🚀 Live Demo**
 
 https://online-food-ordering-system-tdgw.onrender.com
 
