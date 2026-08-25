@@ -123,7 +123,7 @@ Constraints
 
 ## MoSCoW Prioritization
 
-<img width="629" height="593" alt="image" src="https://github.com/user-attachments/assets/907a293c-80d0-4f7e-839c-373f4b956200" />
+
 
 ### Must Have
 - User Registration and Login
